@@ -9,8 +9,8 @@ export const AuthLayout = ({ children, title }) => {
       alignItems="center"
       justifyContent="center"
       sx={{ 
-        minHeight: '100vh', 
-        backgroundColor: 'primary.main', 
+        minHeight: "100vh", 
+        backgroundColor: "primary.main", 
         padding: 4 
       }}
     >
@@ -19,7 +19,7 @@ export const AuthLayout = ({ children, title }) => {
         className="box-shadow" 
         xs={ 3 } 
         sx={{ 
-          backgroundColor: 'white', 
+          backgroundColor: "white", 
           padding: 3, 
           borderRadius: 2,
           width: { sm: 450 }
