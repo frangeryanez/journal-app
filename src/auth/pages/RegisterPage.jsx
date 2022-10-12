@@ -1,40 +1,102 @@
+import { useMemo, useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import { Link as RouterLink } from 'react-router-dom';
-import { Google } from '@mui/icons-material';
 import { Button, Grid, Link, TextField, Typography } from '@mui/material';
-import { AuthLayout } from '../layout/AuthLayout'
+import { AuthLayout } from '../layout/AuthLayout';
+import { useForm } from '../../hooks';
+
+const formData = {
+  email: '',
+  password: '',
+  displayName: ''
+};
+
+const formValidations = {
+  // this field is required
+  email: [ (value) => value.includes('@'), 'The email must have an @'],
+  password: [ (value) => value.length >= 6, 'The password must have more than 6 letters'],
+  displayName: [ (value) => value.length >= 1, 'The name is required'],
+}
 
 export const RegisterPage = () => {
+  const dispatch = useDispatch();
+  const [formSubmitted, setFormSubmitted] = useState(false);
+
+  const { status, errorMessage } = useSelector( state => state.auth );
+  const isCheckingAuthentication = useMemo(() => status === 'checking', [status]);
+
+  const { 
+    displayName, 
+    displayNameValid, 
+    email, 
+    emailValid, 
+    formState,
+    isFormValid, 
+    onInputChange,
+    password, 
+    passwordValid
+  } = useForm(formData, formValidations);
+
+  const onSubmit = event => {
+    event.preventDefault();
+    setFormSubmitted(true);
+
+    if ( !isFormValid ) return;
+
+    // dispatch( startCreatingUserWithEmailPassword(formState) );
+  };
+
   return (
     <AuthLayout title="Register">
-      <form>
+      <form onSubmit={ onSubmit } className='animate__animated animate__fadeIn animate__faster'>
         <Grid container>
           <Grid item xs={ 12 } sx={{ mt: 2 }}>
             <TextField 
+              error={ !!displayNameValid && formSubmitted }
+              fullWidth
+              helperText={ displayNameValid }
               label="Full Name"
-              type="text"
+              name="displayName"
+              onChange={ onInputChange }
               placeholder="Full Name"
-              fullWidth
+              type="text"
+              value={ displayName }
             />
           </Grid>
           <Grid item xs={ 12 } sx={{ mt: 2 }}>
             <TextField 
+              error={ !!emailValid && formSubmitted }
+              fullWidth
+              helperText={ emailValid }
               label="Email"
-              type="email"
+              name="email"
+              onChange={ onInputChange }
               placeholder="email@google.com"
-              fullWidth
+              type="email"
+              value={ email }
             />
           </Grid>
           <Grid item xs={ 12 } sx={{ mt: 2 }}>
             <TextField 
-              label="Password"
-              type="password"
-              placeholder="Password"
+              error={ !!passwordValid && formSubmitted  }
               fullWidth
+              helperText={ passwordValid }
+              label="Password"
+              name="password"
+              onChange={ onInputChange }
+              placeholder="Password"
+              type="password"
+              value={ password }
             />
           </Grid>
           <Grid container spacing={ 2 } sx={{ mb: 2, mt: 1 }}>
             <Grid item xs={ 12 }>
-              <Button variant="contained" fullWidth>
+              <Button 
+                disabled={ isCheckingAuthentication }
+                fullWidth
+                type="submit"
+                variant="contained" 
+              >
                 Create Account
               </Button>
             </Grid>
