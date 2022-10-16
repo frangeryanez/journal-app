@@ -1,9 +1,17 @@
 import { useMemo, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Link as RouterLink } from 'react-router-dom';
-import { Button, Grid, Link, TextField, Typography } from '@mui/material';
+import { 
+  Alert,
+  Button, 
+  Grid, 
+  Link, 
+  TextField, 
+  Typography 
+} from '@mui/material';
 import { AuthLayout } from '../layout/AuthLayout';
 import { useForm } from '../../hooks';
+import { startCreatingUserWithEmailPassword } from '../../store/auth';
 
 const formData = {
   email: '',
@@ -13,17 +21,18 @@ const formData = {
 
 const formValidations = {
   // this field is required
-  email: [ (value) => value.includes('@'), 'The email must have an @'],
-  password: [ (value) => value.length >= 6, 'The password must have more than 6 letters'],
-  displayName: [ (value) => value.length >= 1, 'The name is required'],
+  email: [value => value.includes('@'), 'The email must have an @'],
+  password: [value => value.length >= 6, 'The password must have more than 6 letters'],
+  displayName: [value => value.length >= 1, 'The name is required'],
 }
 
 export const RegisterPage = () => {
   const dispatch = useDispatch();
   const [formSubmitted, setFormSubmitted] = useState(false);
 
-  const { status, errorMessage } = useSelector( state => state.auth );
-  const isCheckingAuthentication = useMemo(() => status === 'checking', [status]);
+  const { status, errorMessage } = useSelector(state => state.auth);
+  const isCheckingAuthentication = useMemo(
+    () => status === 'checking', [status]);
 
   const { 
     displayName, 
@@ -43,12 +52,15 @@ export const RegisterPage = () => {
 
     if ( !isFormValid ) return;
 
-    // dispatch( startCreatingUserWithEmailPassword(formState) );
+    dispatch(startCreatingUserWithEmailPassword(formState));
   };
 
   return (
     <AuthLayout title="Register">
-      <form onSubmit={ onSubmit } className='animate__animated animate__fadeIn animate__faster'>
+      <form 
+        className="animate__animated animate__fadeIn animate__faster"
+        onSubmit={ onSubmit } 
+      >
         <Grid container>
           <Grid item xs={ 12 } sx={{ mt: 2 }}>
             <TextField 
@@ -78,7 +90,7 @@ export const RegisterPage = () => {
           </Grid>
           <Grid item xs={ 12 } sx={{ mt: 2 }}>
             <TextField 
-              error={ !!passwordValid && formSubmitted  }
+              error={ !!passwordValid && formSubmitted }
               fullWidth
               helperText={ passwordValid }
               label="Password"
@@ -90,6 +102,13 @@ export const RegisterPage = () => {
             />
           </Grid>
           <Grid container spacing={ 2 } sx={{ mb: 2, mt: 1 }}>
+            <Grid 
+              item 
+              xs={ 12 }
+              display={ !!errorMessage ? '' : 'none' }
+            >
+              <Alert severity="error">{ errorMessage }</Alert>
+            </Grid>
             <Grid item xs={ 12 }>
               <Button 
                 disabled={ isCheckingAuthentication }

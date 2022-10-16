@@ -7,12 +7,12 @@ import { getFirestore } from 'firebase/firestore/lite';
 
 // Your web app's Firebase configuration
 const firebaseConfig = {
-  apiKey: "AIzaSyC9qM8LKYti4TZus0g00ISzMjudet-H2vg",
-  authDomain: "react-cursos-4368a.firebaseapp.com",
-  projectId: "react-cursos-4368a",
-  storageBucket: "react-cursos-4368a.appspot.com",
-  messagingSenderId: "35683178704",
-  appId: "1:35683178704:web:2cab2003319bbac2eba6d5"
+  apiKey: 'AIzaSyC5VZrSW2Pyny6D-mXg9U7foWEiMFZq9rM',
+  authDomain: 'react-course-d0a40.firebaseapp.com',
+  projectId: 'react-course-d0a40',
+  storageBucket: 'react-course-d0a40.appspot.com',
+  messagingSenderId: '62717892762',
+  appId: '1:62717892762:web:e30d7513630abef5876723'
 };
 
 // Initialize Firebase
